@@ -43,7 +43,6 @@ def build_graph() -> StateGraph:
     """
     # Initialize all agents in the registry
     init_agents()
-     
     
     # Create state graph with dict-based state
     graph = StateGraph(dict)
@@ -100,7 +99,7 @@ def build_graph() -> StateGraph:
     # - END (if handling a simple query)
     graph.add_conditional_edges(
         source="template_agent",
-        path=lambda state: state.get("template_next_step") or "end",  # Convert None to "end"
+        path=lambda state: state.get("template_next_step", "end"),
         path_map={
             "user_input_collector": "user_input_collector",
             "routing_agent": "routing_agent",
@@ -170,15 +169,12 @@ def run_graph(thread_id: str, user_message: str, previous_state: Optional[Dict[s
         try:
             # Attempt to retrieve the last state for this thread
             state_snapshot = graph.get_state(config)
-            previous_state = state_snapshot.values if state_snapshot and state_snapshot.values else {}
-            print(f"previuos state:{previous_state}")
-        except Exception as e:
+            previous_state = state_snapshot.values if state_snapshot else {}
+        except Exception:
             # If no previous state exists, start fresh
-            print(f"No previous state found, starting fresh: {e}")
             previous_state = {}
     
     # Initialize state with user message and preserve existing context
-    # Build this COMPLETELY before any references
     state: Dict[str, Any] = {
         # Session context
         "thread_id": thread_id,
@@ -208,6 +204,13 @@ def run_graph(thread_id: str, user_message: str, previous_state: Optional[Dict[s
     
     # Execute the graph
     final_state = graph.invoke(state, config=config)
+    
+    # Optional: Retrieve state history for debugging/analytics
+    # states_history = list(graph.get_state_history(config))
+    # for historical_state in states_history:
+    #     print(f"Checkpoint: {historical_state.config['configurable']['checkpoint_id']}")
+    #     print(f"Next: {historical_state.next}")
+    #     print(f"Values: {historical_state.values}")
     
     return final_state
 
@@ -247,7 +250,7 @@ def get_current_state(thread_id: str) -> Dict[str, Any]:
     )
     try:
         state_snapshot = graph.get_state(config)
-        return state_snapshot.values if state_snapshot and state_snapshot.values else {}
+        return state_snapshot.values if state_snapshot else {}
     except Exception as e:
         print(f"Error retrieving current state: {e}")
         return {}
@@ -260,6 +263,9 @@ def reset_conversation(thread_id: str) -> None:
     Args:
         thread_id: The conversation thread to reset
     """
+    # Note: MemorySaver doesn't have explicit clear method
+    # State will be overwritten on next invocation
+    # For production, implement proper state cleanup
     config = RunnableConfig(
         configurable={"thread_id": thread_id}
     )
@@ -317,3 +323,41 @@ def start_new_conversation(thread_id: str, user_message: str) -> Dict[str, Any]:
         New state with bot's response
     """
     return run_graph(thread_id, user_message, previous_state=None)
+
+
+# ═══════════════════════════════════════════════════════════════════════════
+# STATE SCHEMA DOCUMENTATION
+# ═══════════════════════════════════════════════════════════════════════════
+
+"""
+State Dictionary Schema:
+
+{
+    # Session context
+    "thread_id": str,                          # Conversation identifier
+    "user_message": str,                       # Latest user input
+    "conversation_history": List[Dict],        # (Optional) Message history
+    
+    # Template management
+    "selected_template_id": Optional[str],     # UUID of chosen template
+    "template_config": Dict[str, Any],         # Full template configuration
+    "template_search_results": List[Dict],     # Available templates
+    
+    # Input collection
+    "provided_inputs": Dict[str, Any],         # User-supplied field values
+    "missing_fields": List[str],               # Fields still needed
+    
+    # Scheduling
+    "job_id": Optional[str],                   # Scheduled report job UUID
+    "report_url": Optional[str],               # Dashboard URL for report
+    
+    # Flow control
+    "workflow_stage": str,                     # discovery|selection|input_collection|scheduling
+    "next_agent": str,                         # Router's decision
+    "template_next_step": Optional[str],       # Template/collector transition
+    "reply": str,                              # Bot's response message
+    
+    # Debugging
+    "routing_reason": Optional[str]            # (Optional) Why router chose this path
+}
+"""

@@ -2,7 +2,7 @@ from typing import Dict, Any, List
 
 from app.agents.base_agent import BaseAgent
 # from ..llm import llm_complete
-from ..tools.fetch_template import fetch_template_tool
+from ...tools.fetch_template import fetch_template_tool
 
 
 class TemplateAgentV1(BaseAgent):

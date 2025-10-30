@@ -29,14 +29,29 @@ class BaseAgent(ABC):
         # An agent will have list of tools we'll decide which tool to call using LLM
         llm = init_chat_model(settings.GEMINI_MODEL, model_provider="google_genai")
         tools = self.tools()
+        
+         # 🧩 DEBUG 1: Confirm which agent is running and which tools are available
+        print(f"\n🧠 Executing agent: {self.name()}")
+        print(f"🧰 Tools attached: {[t.name for t in tools] if tools else 'No tools found!'}")
+        print(f"💬 User message: {state.get('user_message')}\n")
+        
         if tools:
             # For function navigate Mac (CMD + CLICK), Window (CTRL + CLICK)
             agent = create_agent(llm, tools, system_prompt=self.system_prompt())
             # This will select the right tool based on the user message and execute the tool as well
             message = {"messages": [{"role": "user", "content": state.get("user_message")}]}
             result = agent.invoke(message) # This has a stream function as well that will emit all the internal thing graph is doing
-            state["reply"] = result["messages"][-1].text
+            
+            print(f"📨 Raw LLM+Tool result: {result}\n")
+           
+            # ✅ Extract response safely
+            try:
+                state["reply"] = result["messages"][-1].text
+            except Exception as e:
+                print(f"⚠️ Unexpected output format from agent: {e}")
+                state["reply"] = str(result)
         else:
+            print("⚠️ No tools defined for this agent.")
             state["reply"] = "(No tools attached)"
 
         return state
