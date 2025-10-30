@@ -1,0 +1,132 @@
+[
+  {
+    "template_id": 1,
+    "template_name": "Participant Demographics Overview",
+    "template_description": "Shows participant details including age, gender, country, and status",
+    "template_category": "Participant_Demographics",
+    "config_payload": {
+      "columns": ["Participant ID", "Name", "Age", "Gender", "Country", "Participant Status"],
+      "filters": {"Participant Status": ["Active", "Inactive"], "Tax Region": ["US", "UK", "IN"], "Officer Code": []}
+    }
+  },
+  {
+    "template_id": 2,
+    "template_name": "Country-wise Participant Distribution",
+    "template_description": "Shows number of participants by country and status",
+    "template_category": "Participant_Demographics",
+    "config_payload": {
+      "columns": ["Country", "Number of Participants", "Participant Status"],
+      "filters": {"Participant Status": ["Active", "Inactive"], "Tax Region": ["US", "UK", "IN"], "Officer Code": []}
+    }
+  },
+  {
+    "template_id": 3,
+    "template_name": "Participant Grants Overview",
+    "template_description": "List of grants per participant including tax region",
+    "template_category": "Participant_Grants",
+    "config_payload": {
+      "columns": ["Participant ID", "Name", "Grant ID", "Grant Date", "Grant Type", "Tax Region"],
+      "filters": {"Participant Status": ["Active", "Inactive"], "Tax Region": ["US", "UK", "IN"], "Officer Code": []}
+    }
+  },
+  {
+    "template_id": 4,
+    "template_name": "Top Participants by Shares",
+    "template_description": "Participants holding the most shares filtered by officer code",
+    "template_category": "Participant_Grants",
+    "config_payload": {
+      "columns": ["Participant ID", "Name", "Total Shares", "Officer Code"],
+      "filters": {"Participant Status": ["Active"], "Tax Region": ["US", "UK"], "Officer Code": ["OFC001", "OFC002"]}
+    }
+  },
+  {
+    "template_id": 5,
+    "template_name": "Participant Vesting Schedule",
+    "template_description": "Vesting schedule for each participant including participant status",
+    "template_category": "Participant_Vesting",
+    "config_payload": {
+      "columns": ["Participant ID", "Name", "Grant ID", "Vesting Date", "Vesting Amount", "Participant Status"],
+      "filters": {"Participant Status": ["Active"], "Tax Region": ["US", "UK", "IN"], "Officer Code": []}
+    }
+  },
+  {
+    "template_id": 6,
+    "template_name": "Vesting Forecast",
+    "template_description": "Forecast of future vesting events by participant status and tax region",
+    "template_category": "Participant_Vesting",
+    "config_payload": {
+      "columns": ["Participant ID", "Grant ID", "Vesting Date", "Vesting Amount", "Tax Region"],
+      "filters": {"Participant Status": ["Active"], "Tax Region": ["US", "UK"], "Officer Code": []}
+    }
+  },
+  {
+    "template_id": 7,
+    "template_name": "Participant Plan Enrollment",
+    "template_description": "Details of participants enrolled in each plan including tax region",
+    "template_category": "Participant_PlanEnrollment",
+    "config_payload": {
+      "columns": ["Participant ID", "Name", "Plan ID", "Enrollment Date", "Plan Type", "Tax Region"],
+      "filters": {"Participant Status": ["Active"], "Tax Region": ["US", "UK", "IN"], "Officer Code": []}
+    }
+  },
+  {
+    "template_id": 8,
+    "template_name": "New Participant Enrollments",
+    "template_description": "Participants who joined in the last month filtered by officer code",
+    "template_category": "Participant_PlanEnrollment",
+    "config_payload": {
+      "columns": ["Participant ID", "Name", "Enrollment Date", "Plan Type", "Officer Code"],
+      "filters": {"Participant Status": ["Active"], "Tax Region": ["US", "UK"], "Officer Code": ["OFC001", "OFC003"]}
+    }
+  },
+  {
+    "template_id": 9,
+    "template_name": "Participant Compensation Overview",
+    "template_description": "Total compensation including grants and awards filtered by participant status",
+    "template_category": "Participant_Compensation",
+    "config_payload": {
+      "columns": ["Participant ID", "Name", "Base Salary", "Award Amount", "Total Compensation", "Participant Status"],
+      "filters": {"Participant Status": ["Active", "Inactive"], "Tax Region": ["US", "UK"], "Officer Code": []}
+    }
+  },
+  {
+    "template_id": 10,
+    "template_name": "Participant Awards by Year",
+    "template_description": "Awards granted to participants in a specific year filtered by tax region",
+    "template_category": "Participant_Compensation",
+    "config_payload": {
+      "columns": ["Participant ID", "Grant ID", "Grant Year", "Award Amount", "Tax Region"],
+      "filters": {"Participant Status": ["Active"], "Tax Region": ["US", "UK"], "Officer Code": []}
+    }
+  },
+  {
+    "template_id": 11,
+    "template_name": "Participant Exercise Activity",
+    "template_description": "Exercise activity for participant grants with participant status and tax region",
+    "template_category": "Participant_Grants",
+    "config_payload": {
+      "columns": ["Participant ID", "Grant ID", "Exercise Date", "Shares Exercised", "Participant Status", "Tax Region"],
+      "filters": {"Participant Status": ["Active"], "Tax Region": ["US","UK"], "Officer Code": []}
+    }
+  },
+  {
+    "template_id": 12,
+    "template_name": "Grant Expiry Report",
+    "template_description": "Grants approaching expiration filtered by officer code",
+    "template_category": "Participant_Grants",
+    "config_payload": {
+      "columns": ["Participant ID", "Grant ID", "Grant Expiry Date", "Officer Code"],
+      "filters": {"Participant Status": ["Active"], "Tax Region": ["US", "UK"], "Officer Code": ["OFC001","OFC002"]}
+    }
+  },
+  {
+    "template_id": 13,
+    "template_name": "Participant Stock Ownership",
+    "template_description": "Current stock ownership per participant filtered by tax region and status",
+    "template_category": "Participant_Grants",
+    "config_payload": {
+      "columns": ["Participant ID","Name","Shares Owned","Plan Type","Tax Region","Participant Status"],
+      "filters": {"Participant Status":["Active"], "Tax Region":["US","UK","IN"], "Officer Code":[]}
+    }
+  }
+]
